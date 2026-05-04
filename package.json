@@ -1,0 +1,26 @@
+{
+  "name": "autoservice-backend",
+  "version": "1.0.0",
+  "description": "Production-ready Express backend for autoservice lead forms with Telegram notifications.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "express",
+    "telegram",
+    "autoservice",
+    "leads"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.7.9",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

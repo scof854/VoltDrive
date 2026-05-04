@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VoltDrive Diagnostics | Диагностика авто и мототехники</title>
+  <meta name="description" content="Точная диагностика и устранение технических и электронных неисправностей авто и мототехники без лишней замены деталей.">
+  <style>
+    :root {
+      --ink: #101418;
+      --graphite: #171d22;
+      --steel: #6f7b85;
+      --line: #dce3e9;
+      --mist: #f4f7f9;
+      --white: #ffffff;
+      --cyan: #00b8d9;
+      --lime: #b9f227;
+      --amber: #ffb000;
+      --shadow: 0 24px 70px rgba(16, 20, 24, 0.16);
+      --radius: 8px;
+      --max: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--mist);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .page {
+      overflow: hidden;
+    }
+
+    .section {
+      padding: 76px 20px;
+    }
+
+    .wrap {
+      width: min(100%, var(--max));
+      margin: 0 auto;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 18px;
+      color: var(--cyan);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      background: var(--lime);
+      box-shadow: 0 0 0 6px rgba(185, 242, 39, 0.18);
+    }
+
+    .lead {
+      max-width: 660px;
+      margin: 0;
+      color: #53606a;
+      font-size: clamp(1rem, 2.6vw, 1.22rem);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      padding: 0 22px;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      background: var(--lime);
+      color: var(--ink);
+      font-weight: 850;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, border-color 180ms ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 36px rgba(185, 242, 39, 0.26);
+      background: #c8ff3b;
+    }
+
+    .btn.secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--white);
+      border-color: rgba(255, 255, 255, 0.22);
+    }
+
+    .btn.secondary:hover {
+      background: rgba(255, 255, 255, 0.14);
+      box-shadow: none;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 88svh;
+      padding: 18px 20px 64px;
+      color: var(--white);
+      background:
+        linear-gradient(90deg, rgba(16, 20, 24, 0.94) 0%, rgba(16, 20, 24, 0.76) 48%, rgba(16, 20, 24, 0.32) 100%),
+        url("https://images.pexels.com/photos/13083209/pexels-photo-13083209.jpeg?auto=compress&cs=tinysrgb&w=1800") center / cover;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 160px;
+      background: linear-gradient(180deg, transparent, var(--mist));
+      pointer-events: none;
+    }
+
+    .nav {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: min(100%, var(--max));
+      margin: 0 auto;
+      padding: 14px 0;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .logo-mark {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      background: rgba(0, 184, 217, 0.18);
+      color: var(--lime);
+    }
+
+    .nav-phone {
+      color: rgba(255, 255, 255, 0.86);
+      font-weight: 750;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      align-content: center;
+      min-height: calc(88svh - 88px);
+      width: min(100%, var(--max));
+      margin: 0 auto;
+      padding: 42px 0 0;
+    }
+
+    .hero-copy {
+      max-width: 760px;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 22px;
+      font-size: clamp(2.55rem, 10vw, 6.8rem);
+      line-height: 0.94;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      max-width: 760px;
+      margin-bottom: 20px;
+      font-size: clamp(2rem, 6vw, 4.15rem);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin-bottom: 10px;
+      font-size: 1.08rem;
+      line-height: 1.15;
+    }
+
+    .hero .lead {
+      color: rgba(255, 255, 255, 0.78);
+      font-size: clamp(1.08rem, 3vw, 1.36rem);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 34px 0 30px;
+    }
+
+    .hero-proof {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .hero-proof li {
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      padding: 9px 12px;
+      background: rgba(255, 255, 255, 0.07);
+      color: rgba(255, 255, 255, 0.82);
+      border-radius: var(--radius);
+      backdrop-filter: blur(12px);
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .problem {
+      background: var(--mist);
+    }
+
+    .problem-grid {
+      margin-top: 34px;
+      grid-template-columns: 1fr;
+    }
+
+    .issue,
+    .advantage,
+    .step,
+    .quote,
+    .stat {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+      box-shadow: 0 10px 30px rgba(16, 20, 24, 0.05);
+    }
+
+    .issue {
+      padding: 22px;
+    }
+
+    .issue span,
+    .step span {
+      display: inline-flex;
+      width: 34px;
+      height: 34px;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      background: var(--ink);
+      color: var(--lime);
+      font-weight: 900;
+    }
+
+    .issue p,
+    .advantage p,
+    .step p,
+    .quote p {
+      margin-bottom: 0;
+      color: #596671;
+    }
+
+    .solution {
+      background: var(--white);
+    }
+
+    .solution-layout {
+      display: grid;
+      gap: 34px;
+      align-items: center;
+      margin-top: 36px;
+    }
+
+    .media-frame {
+      position: relative;
+      min-height: 430px;
+      overflow: hidden;
+      border-radius: var(--radius);
+      background: var(--graphite);
+      box-shadow: var(--shadow);
+      isolation: isolate;
+    }
+
+    .media-frame img {
+      width: 100%;
+      height: 100%;
+      min-height: 430px;
+      object-fit: cover;
+      filter: saturate(1.05) contrast(1.05);
+    }
+
+    .media-badge {
+      position: absolute;
+      right: 18px;
+      bottom: 18px;
+      width: min(78%, 300px);
+      padding: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(16, 20, 24, 0.78);
+      color: var(--white);
+      border-radius: var(--radius);
+      backdrop-filter: blur(16px);
+    }
+
+    .media-badge strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--lime);
+      font-size: 1.35rem;
+    }
+
+    .steps {
+      display: grid;
+      gap: 14px;
+    }
+
+    .step {
+      padding: 22px;
+    }
+
+    .proof {
+      background: #11161a;
+      color: var(--white);
+    }
+
+    .proof .lead {
+      color: rgba(255, 255, 255, 0.68);
+    }
+
+    .proof-grid {
+      grid-template-columns: 1fr;
+      margin-top: 36px;
+    }
+
+    .stat,
+    .quote {
+      border-color: rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.055);
+      color: var(--white);
+      box-shadow: none;
+    }
+
+    .stat {
+      padding: 24px;
+    }
+
+    .stat strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--lime);
+      font-size: clamp(2rem, 7vw, 3.5rem);
+      line-height: 0.95;
+    }
+
+    .stat span {
+      color: rgba(255, 255, 255, 0.74);
+    }
+
+    .quote {
+      padding: 24px;
+    }
+
+    .quote p {
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .quote strong {
+      display: block;
+      margin-top: 18px;
+      color: var(--white);
+    }
+
+    .advantages {
+      display: grid;
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .advantage {
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .advantage p {
+      color: rgba(255, 255, 255, 0.68);
+    }
+
+    .final {
+      position: relative;
+      color: var(--white);
+      background:
+        linear-gradient(135deg, rgba(0, 184, 217, 0.28), transparent 44%),
+        linear-gradient(180deg, #171d22 0%, #0f1316 100%);
+    }
+
+    .final-layout {
+      display: grid;
+      gap: 34px;
+      align-items: center;
+    }
+
+    .contact-box {
+      display: grid;
+      gap: 12px;
+      padding: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.06);
+      box-shadow: var(--shadow);
+    }
+
+    .contact-box input {
+      width: 100%;
+      min-height: 52px;
+      padding: 0 16px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: var(--radius);
+      outline: 0;
+      background: rgba(255, 255, 255, 0.94);
+      color: var(--ink);
+    }
+
+    .contact-box input:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 4px rgba(0, 184, 217, 0.18);
+    }
+
+    .contact-box .btn {
+      width: 100%;
+      border: 0;
+      cursor: pointer;
+    }
+
+    .microcopy {
+      margin: 2px 0 0;
+      color: rgba(255, 255, 255, 0.58);
+      font-size: 0.9rem;
+    }
+
+    footer {
+      padding: 24px 20px;
+      background: #0f1316;
+      color: rgba(255, 255, 255, 0.54);
+      font-size: 0.9rem;
+    }
+
+    footer .wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      justify-content: space-between;
+    }
+
+    @media (min-width: 680px) {
+      .section {
+        padding: 104px 28px;
+      }
+
+      .hero {
+        padding-right: 28px;
+        padding-left: 28px;
+      }
+
+      .problem-grid,
+      .proof-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .steps {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .contact-box {
+        grid-template-columns: 1fr 1fr;
+        padding: 22px;
+      }
+
+      .contact-box .btn,
+      .microcopy {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (min-width: 980px) {
+      .hero {
+        min-height: 86svh;
+      }
+
+      .hero-content {
+        min-height: calc(86svh - 88px);
+      }
+
+      .problem-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .solution-layout,
+      .final-layout {
+        grid-template-columns: 1fr 0.92fr;
+      }
+
+      .solution-layout .media-frame {
+        order: 2;
+      }
+
+      .proof-grid {
+        grid-template-columns: 0.9fr 1.1fr 1fr;
+      }
+
+      .quote {
+        grid-row: span 2;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero" id="top">
+      <nav class="nav" aria-label="Основная навигация">
+        <a class="logo" href="#top" aria-label="VoltDrive Diagnostics">
+          <span class="logo-mark">V</span>
+          <span>VoltDrive Diagnostics</span>
+        </a>
+        <a class="nav-phone" href="tel:+375291112233">+375 29 111-22-33</a>
+      </nav>
+
+      <div class="hero-content">
+        <div class="hero-copy">
+          <p class="eyebrow">Автоэлектрика, диагностика, ремонт</p>
+          <h1>Находим причину поломки, а не меняем детали наугад</h1>
+          <p class="lead">Компьютерная и техническая диагностика автомобилей и мототехники. Проверяем электронику, датчики, проводку, блоки управления и механику, затем устраняем неисправность с понятным планом работ.</p>
+          <div class="hero-actions">
+            <a class="btn" href="#booking">Записаться на диагностику</a>
+            <a class="btn secondary" href="tel:+375291112233">Позвонить мастеру</a>
+          </div>
+          <ul class="hero-proof" aria-label="Ключевые преимущества">
+            <li>Первичная проверка от 30 минут</li>
+            <li>Отчет до ремонта</li>
+            <li>Авто и мототехника</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section problem">
+      <div class="wrap">
+        <p class="eyebrow">Когда стоит приехать</p>
+        <h2>Ошибка на панели редко говорит всю правду</h2>
+        <p class="lead">Код неисправности показывает направление. Мы проверяем цепочку целиком, чтобы не платить за лишние датчики, блоки и повторные визиты.</p>
+
+        <div class="grid problem-grid">
+          <article class="issue">
+            <span>01</span>
+            <h3>Горит Check Engine</h3>
+            <p>Считываем ошибки, проверяем причины, фиксируем реальные параметры работы систем.</p>
+          </article>
+          <article class="issue">
+            <span>02</span>
+            <h3>Плавают обороты</h3>
+            <p>Ищем сбои в топливе, зажигании, воздухе, датчиках и адаптациях.</p>
+          </article>
+          <article class="issue">
+            <span>03</span>
+            <h3>Не заводится техника</h3>
+            <p>Проверяем питание, стартер, иммобилайзер, сигнализацию, проводку и ЭБУ.</p>
+          </article>
+          <article class="issue">
+            <span>04</span>
+            <h3>После ремонта стало хуже</h3>
+            <p>Перепроверяем узлы, разъемы, прошивку, ошибки монтажа и скрытые дефекты.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section solution">
+      <div class="wrap">
+        <p class="eyebrow">Как работаем</p>
+        <h2>Диагностика как расследование: от симптома к точной причине</h2>
+        <p class="lead">Не ограничиваемся сканером. Сопоставляем данные, тестируем узлы под нагрузкой и показываем, что нужно чинить сейчас, а что может подождать.</p>
+
+        <div class="solution-layout">
+          <div class="media-frame">
+            <img src="https://images.pexels.com/photos/9626877/pexels-photo-9626877.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Мастер проверяет автомобиль под капотом диагностическим оборудованием">
+            <div class="media-badge">
+              <strong>Без угадывания</strong>
+              <span>Каждая рекомендация привязана к измерению, тесту или найденному дефекту.</span>
+            </div>
+          </div>
+
+          <div class="steps">
+            <article class="step">
+              <span>1</span>
+              <h3>Фиксируем симптомы</h3>
+              <p>Слушаем владельца, повторяем проблему, смотрим историю ошибок и ремонта.</p>
+            </article>
+            <article class="step">
+              <span>2</span>
+              <h3>Проверяем системы</h3>
+              <p>Сканер, мультиметр, осциллограф, дымогенератор и ручные тесты по ситуации.</p>
+            </article>
+            <article class="step">
+              <span>3</span>
+              <h3>Показываем причину</h3>
+              <p>Объясняем дефект простым языком, согласуем стоимость и сроки до ремонта.</p>
+            </article>
+            <article class="step">
+              <span>4</span>
+              <h3>Устраняем поломку</h3>
+              <p>Ремонтируем проводку, датчики, блоки, механику и проверяем результат повторно.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section proof">
+      <div class="wrap">
+        <p class="eyebrow">Почему доверяют</p>
+        <h2>Сервис для тех, кто хочет понять машину, а не спорить с ней</h2>
+        <p class="lead">Мы говорим по делу, не давим на срочность и не прячем диагностику за общими фразами.</p>
+
+        <div class="grid proof-grid">
+          <article class="stat">
+            <strong>87%</strong>
+            <span>неисправностей подтверждаем в первый визит</span>
+          </article>
+          <article class="quote">
+            <p>“После трех сервисов нашли перебитый провод в жгуте и восстановили за день. Никаких лишних блоков, только точная работа.”</p>
+            <strong>Андрей, BMW 3 Series</strong>
+          </article>
+          <article class="stat">
+            <strong>12+</strong>
+            <span>лет в автоэлектрике и диагностике</span>
+          </article>
+          <div class="advantages">
+            <article class="advantage">
+              <h3>Отчет перед ремонтом</h3>
+              <p>Вы видите, за что платите, до начала работ.</p>
+            </article>
+            <article class="advantage">
+              <h3>Работаем с редкими случаями</h3>
+              <p>Плавающие ошибки, CAN, иммобилайзеры, блоки управления, мототехника.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section final" id="booking">
+      <div class="wrap final-layout">
+        <div>
+          <p class="eyebrow">Запись</p>
+          <h2>Приезжайте с симптомом. Уедете с понятным решением.</h2>
+          <p class="lead">Оставьте контакты, и мастер уточнит модель, симптомы и ближайшее время диагностики. Срочные случаи разбираем в день обращения, если есть свободное окно.</p>
+        </div>
+
+        <form class="contact-box" id="leadForm">
+          <input type="text" name="name" placeholder="Имя" aria-label="Имя">
+          <input type="tel" name="phone" placeholder="Телефон" aria-label="Телефон">
+          <input type="text" name="vehicle" placeholder="Авто / мото и симптом" aria-label="Авто или мото и симптом">
+          <input type="text" name="time" placeholder="Удобное время" aria-label="Удобное время">
+          <button class="btn" type="submit">Получить план диагностики</button>
+          <p class="microcopy" id="leadStatus">Ответим без навязчивых звонков. Если удобнее сразу обсудить проблему, звоните: +375 29 111-22-33.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>VoltDrive Diagnostics</span>
+      <span>Диагностика и ремонт автоэлектрики, электроники и технических неисправностей</span>
+    </div>
+  </footer>
+
+  <script>
+    const leadForm = document.querySelector('#leadForm');
+    const leadStatus = document.querySelector('#leadStatus');
+    const apiUrl = window.location.origin === 'http://localhost:3000'
+      ? '/api/lead'
+      : 'http://localhost:3000/api/lead';
+
+    leadForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      leadStatus.textContent = 'Отправляем заявку...';
+
+      const payload = Object.fromEntries(new FormData(leadForm));
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          leadStatus.textContent = result.message || 'Не удалось отправить заявку. Проверьте поля.';
+          return;
+        }
+
+        leadStatus.textContent = 'Заявка отправлена. Мастер скоро свяжется с вами.';
+        leadForm.reset();
+      } catch (error) {
+        leadStatus.textContent = 'Сервер временно недоступен. Позвоните нам напрямую.';
+      }
+    });
+  </script>
+</body>
+</html>
